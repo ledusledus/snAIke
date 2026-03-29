@@ -34,3 +34,10 @@ Once source files exist, update this section with:
 - How to run the game
 - How to run tests (`pytest`)
 - How to lint (`ruff check .` / `mypy .`)
+
+## Development Rules
+
+- **Formatting**: Run `ruff format .` before every commit. Also run `ruff check .` and fix any reported issues.
+- **Tests**: All tests must pass before committing. Run with `pytest`. Never commit code that breaks existing tests.
+- **Writing tests**: Write unit tests for new logic. Tests should be focused and fast. Prefer testing behavior over implementation details.
+- **Commits**: Make small, focused commits — one logical change per commit. Do not bundle unrelated changes together.
