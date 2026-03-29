@@ -1,5 +1,8 @@
+from snaike.game import run_game
+
+
 def main() -> None:
-    pass
+    run_game()
 
 
 if __name__ == "__main__":

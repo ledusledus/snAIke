@@ -144,3 +144,38 @@ class Renderer:
 
     def close(self) -> None:
         pygame.quit()
+
+
+KEY_MAP: dict[int, Direction] = {
+    pygame.K_UP: Direction.UP,
+    pygame.K_DOWN: Direction.DOWN,
+    pygame.K_LEFT: Direction.LEFT,
+    pygame.K_RIGHT: Direction.RIGHT,
+    pygame.K_w: Direction.UP,
+    pygame.K_s: Direction.DOWN,
+    pygame.K_a: Direction.LEFT,
+    pygame.K_d: Direction.RIGHT,
+}
+
+
+def run_game() -> None:
+    pygame.init()
+    state = GameState.new()
+    renderer = Renderer(GRID_WIDTH, GRID_HEIGHT)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                renderer.close()
+                return
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    renderer.close()
+                    return
+                if event.key == pygame.K_r and state.is_over:
+                    state = GameState.new()
+                elif event.key in KEY_MAP:
+                    state.handle_input(KEY_MAP[event.key])
+
+        state.tick()
+        renderer.draw(state)
