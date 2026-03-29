@@ -28,12 +28,15 @@ python main.py  # adjust once entry point is established
 - The `.gitignore` is pre-configured for Python tooling (pytest, coverage, mypy, ruff, poetry, pipenv, pdm, etc.), so those tools can be adopted without gitignore changes.
 - Game framework not yet chosen — likely Pygame or curses-based for terminal rendering.
 
-## Commands (to be added as the project grows)
+## Commands
 
-Once source files exist, update this section with:
-- How to run the game
-- How to run tests (`pytest`)
-- How to lint (`ruff check .` / `mypy .`)
+```bash
+pip install -e ".[dev]"   # install with dev dependencies
+snaike                    # run the game
+pytest                    # run tests
+ruff format .             # format code
+ruff check .              # lint
+```
 
 ## Development Rules
 
