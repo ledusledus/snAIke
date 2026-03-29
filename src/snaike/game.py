@@ -1,7 +1,9 @@
 import random
 from dataclasses import dataclass
 
-from snaike.food import Food, spawn_food
+import pygame
+
+from snaike.food import Food, FoodKind, spawn_food
 from snaike.snake import Direction, Snake, Vec2
 
 GRID_WIDTH = 30
@@ -53,3 +55,92 @@ class GameState:
 
         if not self.snake.is_alive(GRID_WIDTH, GRID_HEIGHT):
             self.is_over = True
+
+
+_SCORE_BAR_HEIGHT = 28
+_CELL = 24
+
+_COLOR_BG = (15, 20, 15)
+_COLOR_HEAD = (80, 220, 80)
+_COLOR_BODY = (40, 150, 40)
+_COLOR_SCORE = (220, 220, 220)
+_COLOR_GAME_OVER = (220, 60, 60)
+
+_FOOD_COLORS: dict[FoodKind, tuple[int, int, int]] = {
+    FoodKind.FROG: (0, 200, 80),
+    FoodKind.BIRD: (100, 160, 255),
+    FoodKind.MOUSE: (200, 180, 160),
+}
+
+
+class Renderer:
+    FPS = 10
+
+    def __init__(self, grid_width: int, grid_height: int) -> None:
+        self._gw = grid_width
+        self._gh = grid_height
+        width = grid_width * _CELL
+        height = grid_height * _CELL + _SCORE_BAR_HEIGHT
+        self._screen = pygame.display.set_mode((width, height))
+        pygame.display.set_caption("snAIke")
+        self._font = pygame.font.SysFont("monospace", 18)
+        self._clock = pygame.time.Clock()
+
+    def draw(self, state: GameState) -> None:
+        self._screen.fill(_COLOR_BG)
+        self._draw_score(state)
+        self._draw_food(state)
+        self._draw_snake(state)
+        if state.is_over:
+            self._draw_game_over(state)
+        pygame.display.flip()
+        self._clock.tick(self.FPS)
+
+    def _cell_rect(self, x: int, y: int) -> pygame.Rect:
+        return pygame.Rect(x * _CELL, _SCORE_BAR_HEIGHT + y * _CELL, _CELL, _CELL)
+
+    def _draw_score(self, state: GameState) -> None:
+        text = self._font.render(f"Score: {state.score}", True, _COLOR_SCORE)
+        self._screen.blit(text, (8, 5))
+
+    def _draw_snake(self, state: GameState) -> None:
+        for i, (x, y) in enumerate(state.snake.segments):
+            color = _COLOR_HEAD if i == 0 else _COLOR_BODY
+            pygame.draw.rect(self._screen, color, self._cell_rect(x, y))
+
+    def _draw_food(self, state: GameState) -> None:
+        if state.food is None:
+            return
+        x, y = state.food.pos
+        color = _FOOD_COLORS[state.food.kind]
+        rect = self._cell_rect(x, y)
+        cx, cy = rect.centerx, rect.centery
+        r = _CELL // 2 - 2
+
+        if state.food.kind == FoodKind.FROG:
+            pygame.draw.circle(self._screen, color, (cx, cy), r)
+        elif state.food.kind == FoodKind.BIRD:
+            points = [(cx, cy - r), (cx + r, cy + r), (cx - r, cy + r)]
+            pygame.draw.polygon(self._screen, color, points)
+        else:  # MOUSE
+            pygame.draw.circle(self._screen, color, (cx, cy), r)
+            ear_r = r // 2
+            pygame.draw.circle(self._screen, color, (cx - r + 2, cy - r + 2), ear_r)
+            pygame.draw.circle(self._screen, color, (cx + r - 2, cy - r + 2), ear_r)
+
+    def _draw_game_over(self, state: GameState) -> None:
+        overlay = pygame.Surface(self._screen.get_size(), pygame.SRCALPHA)
+        overlay.fill((0, 0, 0, 160))
+        self._screen.blit(overlay, (0, 0))
+        lines = [
+            self._font.render("GAME OVER", True, _COLOR_GAME_OVER),
+            self._font.render(f"Score: {state.score}", True, _COLOR_SCORE),
+            self._font.render("R to restart  |  ESC to quit", True, _COLOR_SCORE),
+        ]
+        cx = self._screen.get_width() // 2
+        cy = self._screen.get_height() // 2 - (len(lines) * 24) // 2
+        for i, surf in enumerate(lines):
+            self._screen.blit(surf, (cx - surf.get_width() // 2, cy + i * 28))
+
+    def close(self) -> None:
+        pygame.quit()
