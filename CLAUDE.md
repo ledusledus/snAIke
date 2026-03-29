@@ -8,12 +8,11 @@ snAIke is a Python-based snake game playable from the command line on macOS and 
 
 ## Setup
 
-This project has no dependency management files yet. When adding dependencies, use `pyproject.toml` (preferred) or `requirements.txt`. Install dependencies with:
+Requires Python 3.11+ (Homebrew Python 3.13 is available at `/opt/homebrew/bin/python3.13`).
 
 ```bash
-pip install -r requirements.txt
-# or
-pip install -e .
+/opt/homebrew/bin/python3.13 -m venv .venv
+.venv/bin/pip install -e ".[dev]"
 ```
 
 ## Running the Game
@@ -31,11 +30,11 @@ python main.py  # adjust once entry point is established
 ## Commands
 
 ```bash
-pip install -e ".[dev]"   # install with dev dependencies
-snaike                    # run the game
-pytest                    # run tests
-ruff format .             # format code
-ruff check .              # lint
+.venv/bin/pip install -e ".[dev]"   # install with dev dependencies
+.venv/bin/snaike                    # run the game
+.venv/bin/pytest                    # run tests
+.venv/bin/ruff format .             # format code
+.venv/bin/ruff check .              # lint
 ```
 
 ## Development Rules
