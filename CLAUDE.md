@@ -1,0 +1,36 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+snAIke is a Python-based snake game playable from the command line on macOS and Windows. The player controls a snake that eats frogs, birds, and mice to grow longer; not eating causes the snake to shrink. Controls: WASD and arrow keys.
+
+## Setup
+
+This project has no dependency management files yet. When adding dependencies, use `pyproject.toml` (preferred) or `requirements.txt`. Install dependencies with:
+
+```bash
+pip install -r requirements.txt
+# or
+pip install -e .
+```
+
+## Running the Game
+
+```bash
+python main.py  # adjust once entry point is established
+```
+
+## Architecture Notes
+
+- **Early-stage repo**: Only README and .gitignore exist. No source code has been committed yet.
+- The `.gitignore` is pre-configured for Python tooling (pytest, coverage, mypy, ruff, poetry, pipenv, pdm, etc.), so those tools can be adopted without gitignore changes.
+- Game framework not yet chosen — likely Pygame or curses-based for terminal rendering.
+
+## Commands (to be added as the project grows)
+
+Once source files exist, update this section with:
+- How to run the game
+- How to run tests (`pytest`)
+- How to lint (`ruff check .` / `mypy .`)
