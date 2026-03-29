@@ -44,3 +44,4 @@ ruff check .              # lint
 - **Tests**: All tests must pass before committing. Run with `pytest`. Never commit code that breaks existing tests.
 - **Writing tests**: Write unit tests for new logic. Tests should be focused and fast. Prefer testing behavior over implementation details.
 - **Commits**: Make small, focused commits — one logical change per commit. Do not bundle unrelated changes together.
+- **Devlog**: After completing any task, append an entry to `devlog.md` with the date, the user's request (verbatim or a close paraphrase), and a short summary of what was done.
